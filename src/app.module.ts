@@ -4,6 +4,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { configValidationSchema } from 'src/config/config.schema';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { configValidationSchema } from 'src/config/config.schema';
       synchronize: true,
     }),
     ProjectsModule,
+    ContactModule,
   ],
 })
 export class AppModule {}

@@ -38,4 +38,12 @@ export class ProjectsService {
       throw error;
     }
   }
+
+  async deleteProject(id: string): Promise<void> {
+    const result = await this.projectRepository.delete({ id });
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Project with ID "${id}" not found`);
+    }
+  }
 }
