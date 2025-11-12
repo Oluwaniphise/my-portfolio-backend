@@ -10,28 +10,19 @@ export class ContactService {
   constructor(
     @InjectRepository(ContactMessage)
     private readonly contactRepository: Repository<ContactMessage>,
-    // This assumes you have configured and imported the MailerModule
     private readonly mailerService: MailerService,
   ) {}
 
-  /**
-   * Saves the contact message to the database and sends an email notification.
-   * @param contactFormDto The data from the contact form.
-   * @returns The saved ContactMessage entity.
-   */
   async handleContactForm(
     contactFormDto: ContactFormDto,
   ): Promise<ContactMessage> {
-    // 1. SAVE TO DATABASE (High Priority)
     const newMessage = this.contactRepository.create(contactFormDto);
     const savedMessage = await this.contactRepository.save(newMessage);
 
-    // 2. SEND EMAIL NOTIFICATION (Secondary Priority, but important)
     try {
       await this.mailerService.sendMail({
-        // Replace with your actual target Gmail address
         to: process.env.GMAIL_USERNAME,
-        from: savedMessage.email, // The sender's email
+        from: savedMessage.email,
         subject: `New Portfolio Inquiry: ${savedMessage.subject}`,
         text: `
           New message received from your portfolio:
@@ -56,12 +47,10 @@ export class ContactService {
         `,
       });
 
-      // Update DB to reflect successful email send (optional but good practice)
       savedMessage.emailSent = true;
       await this.contactRepository.save(savedMessage);
     } catch (error) {
       console.error('Error sending contact email:', error);
-      // Log the failure but still return the saved DB message
     }
 
     return savedMessage;

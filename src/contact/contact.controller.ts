@@ -9,10 +9,9 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Post()
-  @HttpCode(HttpStatus.ACCEPTED) // Return 202 Accepted status
+  @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ summary: 'Submit a contact form message' })
   async submitMessage(@Body() contactFormDto: ContactFormDto) {
-    // We handle the database save and email send here
     await this.contactService.handleContactForm(contactFormDto);
 
     return {
