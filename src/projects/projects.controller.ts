@@ -10,7 +10,7 @@ export class ProjectsController {
 
   @Get()
   getProject() {
-    return 'Hello projects';
+    return this.projectsService.getAllProjects();
   }
 
   @Post()

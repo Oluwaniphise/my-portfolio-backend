@@ -10,6 +10,10 @@ export class ProjectsRepository extends Repository<Project> {
     super(Project, dataSource.createEntityManager());
   }
 
+  async findAllProjects(): Promise<Project[]> {
+    return this.find();
+  }
+
   async createProject(createProjectDto: CreateProjectDto): Promise<Project> {
     const project = this.create(createProjectDto);
 

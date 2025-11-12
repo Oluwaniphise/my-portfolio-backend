@@ -8,7 +8,11 @@ import { UpdateProjectDto } from './dto/update-project-dto';
 export class ProjectsService {
   constructor(private projectRepository: ProjectsRepository) {}
 
-  async getTaskById(id: string): Promise<Project> {
+  async getAllProjects(): Promise<Project[]> {
+    return this.projectRepository.findAllProjects();
+  }
+
+  async getProjectById(id: string): Promise<Project> {
     const found = await this.projectRepository.findOne({ where: { id } });
     if (!found) {
       throw new NotFoundException(`Project with ID "${id}" not found`);
@@ -24,14 +28,14 @@ export class ProjectsService {
     id: string,
     updateProjectDto: UpdateProjectDto,
   ): Promise<Project> {
-    return await this.projectRepository.updateProject(id, updateProjectDto);
-    // try {
-    //   return await this.projectsRepository.updateProject(id, updateProjectDto);
-    // } catch (error) {
-    //   if (error.message.includes('not found')) {
-    //     throw new NotFoundException(`Project with ID ${id} not found.`);
-    //   }
-    //   throw error;
-    // }
+    // return await this.projectRepository.updateProject(id, updateProjectDto);
+    try {
+      return await this.projectRepository.updateProject(id, updateProjectDto);
+    } catch (error) {
+      if (error.message.includes('not found')) {
+        throw new NotFoundException(`Project with ID ${id} not found.`);
+      }
+      throw error;
+    }
   }
 }
